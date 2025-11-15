@@ -1,0 +1,52 @@
+{
+  "aliases": {},
+  "obstacles": [
+    {
+      "x": 12,
+      "y": 3,
+      "label": "pillar"
+    },
+    {
+      "x": 13,
+      "y": 3,
+      "label": "pillar"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "label": "dynamic_block"
+    },
+    {
+      "x": 0,
+      "y": 18,
+      "label": "dynamic_block"
+    },
+    {
+      "x": 16,
+      "y": 8,
+      "label": "dynamic_block"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "label": "dynamic_block"
+    }
+  ],
+  "high_cost_zones": [
+    {
+      "xmin": 11,
+      "xmax": 16,
+      "ymin": 2,
+      "ymax": 7,
+      "cost": 2
+    },
+    {
+      "xmin": 14,
+      "xmax": 20,
+      "ymin": 18,
+      "ymax": 22,
+      "cost": 3
+    }
+  ],
+  "time_windows": []
+}

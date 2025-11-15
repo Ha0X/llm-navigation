@@ -1,0 +1,8 @@
+{
+  "places": [
+    {"name": "A", "x": 2, "y": 2, "r": 2, "tags": ["battery_zone","high_priority"]},
+    {"name": "B", "x": 25, "y": 3, "r": 2, "tags": ["corridor","rush_0809"]},
+    {"name": "C", "x": 15, "y": 20, "r": 2, "tags": ["tools","fragile"]},
+    {"name": "D", "x": 4, "y": 25, "r": 2, "tags": ["storage"]}
+  ]
+}

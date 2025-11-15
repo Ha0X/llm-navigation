@@ -1,0 +1,17 @@
+{
+  "skills": {
+    "navigate": {
+      "success": 0,
+      "fail": 0,
+      "avg_time": 0.0,
+      "tips": [
+        "prefer_alt_route"
+      ]
+    },
+    "inspect": {
+      "success": 0,
+      "fail": 0,
+      "avg_time": 0.0
+    }
+  }
+}
