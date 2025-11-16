@@ -1,0 +1,52 @@
+{
+  "task": "在40分钟内优先巡检battery_zone与tools，08:00-09:00绕行corridor，若遇设备占用则改拍相邻点",
+  "order": [
+    "A",
+    "C"
+  ],
+  "steps": [
+    {
+      "type": "navigate",
+      "target": "A"
+    },
+    {
+      "type": "inspect",
+      "target": "A"
+    },
+    {
+      "type": "navigate",
+      "target": "C"
+    },
+    {
+      "type": "inspect",
+      "target": "C"
+    }
+  ],
+  "milestones": [
+    {
+      "name": "到达A",
+      "eta_min": 5
+    },
+    {
+      "name": "到达C",
+      "eta_min": 20
+    }
+  ],
+  "notes": [],
+  "rationale": "在08:00-09:00时间窗内，优先巡检battery_zone（位置A）和tools（位置C），以确保高优先级任务的完成。因此选择了A并顺利完成后，直接前往C，避开了corridor的拥堵。虽然面对到达B的潜在阻塞，但没有必要选择B，而是选择了高优先级的C。",
+  "errors": [],
+  "constraints": {
+    "deadline_minutes": 40,
+    "time_window": {
+      "start": "08:00",
+      "end": "09:00",
+      "avoid_tags": [
+        "corridor"
+      ]
+    },
+    "priority_tags": [
+      "battery_zone",
+      "tools"
+    ]
+  }
+}

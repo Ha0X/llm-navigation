@@ -10,43 +10,73 @@
       "x": 13,
       "y": 3,
       "label": "pillar"
-    },
-    {
-      "x": 14,
-      "y": 1,
-      "label": "dynamic_block"
-    },
-    {
-      "x": 0,
-      "y": 18,
-      "label": "dynamic_block"
-    },
-    {
-      "x": 16,
-      "y": 8,
-      "label": "dynamic_block"
-    },
-    {
-      "x": 0,
-      "y": 2,
-      "label": "dynamic_block"
     }
   ],
   "high_cost_zones": [
     {
       "xmin": 11,
-      "xmax": 16,
+      "xmax": 20,
       "ymin": 2,
       "ymax": 7,
       "cost": 2
     },
     {
-      "xmin": 14,
-      "xmax": 20,
+      "xmin": 20,
+      "xmax": 28,
       "ymin": 18,
       "ymax": 22,
       "cost": 3
     }
   ],
-  "time_windows": []
+  "time_windows": [],
+  "dynamic_blocks": [
+    {
+      "x": 2,
+      "y": 6,
+      "label": "dynamic",
+      "ts": 1763260040,
+      "expire_ts": 1763263640,
+      "confidence": 0.6
+    },
+    {
+      "x": 12,
+      "y": 20,
+      "label": "dynamic",
+      "ts": 1763260040,
+      "expire_ts": 1763263640,
+      "confidence": 0.6
+    },
+    {
+      "x": 15,
+      "y": 20,
+      "label": "dynamic",
+      "ts": 1763260069,
+      "expire_ts": 1763263669,
+      "confidence": 0.6
+    },
+    {
+      "x": 15,
+      "y": 9,
+      "label": "dynamic",
+      "ts": 1763260069,
+      "expire_ts": 1763263669,
+      "confidence": 0.6
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "label": "dynamic",
+      "ts": 1763260925,
+      "expire_ts": 1763264525,
+      "confidence": 0.6
+    },
+    {
+      "x": 11,
+      "y": 19,
+      "label": "dynamic",
+      "ts": 1763260925,
+      "expire_ts": 1763264525,
+      "confidence": 0.6
+    }
+  ]
 }

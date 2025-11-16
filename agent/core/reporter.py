@@ -23,17 +23,40 @@ class Reporter:
         report.append('# Agent Report')
         report.append('## Task')
         report.append(plan.get('task',''))
+        if plan.get('rationale'):
+            report.append('## Rationale')
+            report.append(plan.get('rationale',''))
+        if plan.get('errors'):
+            report.append('## Errors')
+            for e in plan.get('errors', []):
+                report.append(f"- {e}")
         report.append('## Steps')
         for s in plan.get('steps', []):
-            report.append(f"- {s['type']} -> {s['target']}")
+            t = s.get('type','')
+            tgt = s.get('target','')
+            if t:
+                if tgt:
+                    report.append(f"- {t} -> {tgt}")
+                else:
+                    report.append(f"- {t}")
         report.append('## Logs')
         for l in logs:
             t = l.get('type')
             r = l.get('result')
             target = l.get('target')
-            report.append(f"- {t} {target} {r}")
+            if t in ('navigate','navigate_alt'):
+                reason = l.get('reason','')
+                pos = l.get('pos','')
+                report.append(f"- {t} {target} {r} {reason} {pos}")
+            elif t == 'fallback':
+                adj = l.get('adjacent','')
+                report.append(f"- fallback {target} -> inspect_adjacent {adj} {r}")
+            else:
+                report.append(f"- {t} {target} {r}")
         report.append('## Memory References')
-        eps = memory_ctx.get('episodes', [])
-        for e in eps:
-            report.append(f"- {e.get('action')} {e.get('place')} {e.get('result')}")
+        dyn = memory_ctx.get('semantic', {}).get('dynamic_blocks', [])
+        for o in dyn[:5]:
+            report.append(f"- dynamic_block ({o.get('x')},{o.get('y')}) conf={o.get('confidence')}")
+        for z in memory_ctx.get('semantic', {}).get('high_cost_zones', []):
+            report.append(f"- high_cost_zone x=[{z['xmin']},{z['xmax']}] y=[{z['ymin']},{z['ymax']}] cost={z.get('cost',1)}")
         (out_dir / 'report.md').write_text("\n".join(report), encoding='utf-8')

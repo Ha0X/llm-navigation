@@ -1,6 +1,10 @@
 import argparse
 import json
 from pathlib import Path
+import sys
+ROOT = Path(__file__).resolve().parents[1]
+if __package__ is None or __package__ == "":
+    sys.path.insert(0, str(ROOT))
 from rich.console import Console
 from rich.table import Table
 from agent.core.memory import MemoryStore
@@ -25,7 +29,7 @@ def load_config(path: Path):
         return json.load(f)
 
 def cmd_show_plan(args):
-    root = Path('.')
+    root = ROOT
     grid = load_grid(root / 'maps' / 'grid.json')
     locations = load_locations(root / 'maps' / 'locations.json')
     config = load_config(root / 'config.json')
@@ -37,10 +41,10 @@ def cmd_show_plan(args):
     try:
         plan = planner.plan(args.task, memory_ctx, locations, config)
     except Exception as e:
+        from agent.core.baselines import plan_greedy_distance
+        plan = plan_greedy_distance(args.task, locations, config.get('start', {'x':0,'y':0}))
         console = Console()
-        console.print(f"[red]Planner error:[/red] {e}")
-        console.print("[yellow]Hint:[/yellow] provide --api_key and --base_url to enable LLM planning")
-        return
+        console.print(f"[yellow]LLM unavailable, using baseline greedy distance[/yellow]")
     out_dir = root / 'out'
     out_dir.mkdir(parents=True, exist_ok=True)
     with (out_dir / 'plan.json').open('w', encoding='utf-8') as f:
@@ -55,7 +59,7 @@ def cmd_show_plan(args):
     console.print('Plan saved at ' + str(out_dir / 'plan.json'))
 
 def cmd_run(args):
-    root = Path('.')
+    root = ROOT
     grid = load_grid(root / 'maps' / 'grid.json')
     locations = load_locations(root / 'maps' / 'locations.json')
     config = load_config(root / 'config.json')
@@ -75,14 +79,14 @@ def cmd_run(args):
     executor = Executor(navigator, memory)
     trajectory, logs = executor.run(plan, locations, config)
     reporter = Reporter()
-    out_dir = Path('out')
+    out_dir = root / 'out'
     out_dir.mkdir(parents=True, exist_ok=True)
     reporter.export(plan, trajectory, logs, memory_ctx, out_dir)
     console = Console()
     console.print('[green]Report generated[/green] at ' + str(out_dir / 'report.md'))
 
 def cmd_clean(args):
-    root = Path('.')
+    root = ROOT
     out_dir = root / 'out'
     if out_dir.exists():
         for p in out_dir.iterdir():
@@ -110,7 +114,7 @@ def main():
     p2.add_argument('--base_url', type=str, default=None)
     p2.set_defaults(func=cmd_run)
     p3 = sub.add_parser('eval')
-    p3.add_argument('tasks_file', type=str)
+    p3.add_argument('tasks_file', type=str, nargs='?', default='eval/tasks.txt')
     p3.add_argument('--api_key', type=str, default=None)
     p3.add_argument('--base_url', type=str, default=None)
     p3.add_argument('--baseline', type=str, choices=['random','greedy'], default='greedy')
@@ -123,14 +127,19 @@ def main():
         return
     args.func(args)
 def _run_once(task: str, use_memory: bool, api_key: str, base_url: str, baseline: str = 'greedy'):
-    root = Path('.')
+    root = ROOT
     grid = load_grid(root / 'maps' / 'grid.json')
     locations = load_locations(root / 'maps' / 'locations.json')
     config = load_config(root / 'config.json')
     if api_key and base_url:
         llm_configure(api_key, base_url)
-    memory = MemoryStore(root / 'memory')
-    memory_ctx = memory.retrieve(task, locations, k=5) if use_memory else {'episodes':[], 'semantic': memory.semantic, 'procedural': memory.procedural}
+    if use_memory:
+        memory = MemoryStore(root / 'memory')
+        memory_ctx = memory.retrieve(task, locations, k=5)
+    else:
+        from agent.core.memory import NoOpMemory
+        memory = NoOpMemory(root / 'memory')
+        memory_ctx = {'episodes':[], 'semantic': memory.semantic, 'procedural': memory.procedural}
     planner = Planner()
     t0 = perf_counter()
     try:
@@ -152,6 +161,8 @@ def _run_once(task: str, use_memory: bool, api_key: str, base_url: str, baseline
 
 def cmd_eval(args):
     tasks_path = Path(args.tasks_file)
+    if not tasks_path.is_absolute():
+        tasks_path = ROOT / tasks_path
     tasks = []
     with tasks_path.open('r', encoding='utf-8') as f:
         for line in f:
@@ -164,7 +175,7 @@ def cmd_eval(args):
         r0 = _run_once(t, use_memory=False, api_key=args.api_key, base_url=args.base_url, baseline=args.baseline)
         r1 = _run_once(t, use_memory=True, api_key=args.api_key, base_url=args.base_url, baseline=args.baseline)
         results.extend([r0, r1])
-    out_dir = Path('out')
+    out_dir = ROOT / 'out'
     out_dir.mkdir(parents=True, exist_ok=True)
     metrics_csv = out_dir / 'metrics.csv'
     with metrics_csv.open('w', encoding='utf-8') as f:

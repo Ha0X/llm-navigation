@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="300">
+<rect x="0" y="0" width="800" height="300" fill="#fff"/>
+<text x="40" y="30" font-size="14">Time: memory vs baseline</text>
+<rect x="40" y="253" width="48" height="7" fill="#888"/>
+<rect x="88" y="253" width="48" height="7" fill="#4caf50"/>
+<rect x="184" y="40" width="48" height="220" fill="#888"/>
+<rect x="232" y="254" width="48" height="6" fill="#4caf50"/>
+<rect x="328" y="256" width="48" height="4" fill="#888"/>
+<rect x="376" y="253" width="48" height="7" fill="#4caf50"/>
+<rect x="472" y="257" width="48" height="3" fill="#888"/>
+<rect x="520" y="256" width="48" height="4" fill="#4caf50"/>
+<rect x="616" y="256" width="48" height="4" fill="#888"/>
+<rect x="664" y="256" width="48" height="4" fill="#4caf50"/>
+</svg>

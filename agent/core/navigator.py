@@ -17,7 +17,8 @@ class Navigator:
             for ob in self.semantic.get('obstacles', []):
                 ox = int(ob.get('x'))
                 oy = int(ob.get('y'))
-                if ox == x and oy == y:
+                label = ob.get('label')
+                if label == 'pillar' and ox == x and oy == y:
                     return False
             return True
         def cost(x,y):
@@ -25,6 +26,10 @@ class Navigator:
             for z in self.semantic.get('high_cost_zones', []):
                 if z['xmin'] <= x <= z['xmax'] and z['ymin'] <= y <= z['ymax']:
                     c += z.get('cost',1)
+            dyn = self.semantic.get('dynamic_blocks', [])
+            for ob in dyn:
+                if int(ob.get('x')) == x and int(ob.get('y')) == y:
+                    c += int(max(1, round(10 * float(ob.get('confidence', 0.5)))))
             return c
         def heuristic(a,b):
             return abs(a[0]-b[0]) + abs(a[1]-b[1])

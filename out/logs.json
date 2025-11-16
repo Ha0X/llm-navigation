@@ -1,0 +1,62 @@
+{
+  "logs": [
+    {
+      "type": "navigate",
+      "target": "A",
+      "result": "ok",
+      "pos": [
+        2,
+        2
+      ]
+    },
+    {
+      "type": "inspect",
+      "target": "A",
+      "result": "ok"
+    },
+    {
+      "type": "navigate",
+      "target": "C",
+      "result": "blocked",
+      "reason": "dynamic",
+      "pos": [
+        2,
+        3
+      ]
+    },
+    {
+      "type": "navigate",
+      "target": "C",
+      "result": "blocked",
+      "reason": "dynamic",
+      "pos": [
+        11,
+        19
+      ]
+    },
+    {
+      "type": "fallback",
+      "target": "C",
+      "action": "inspect_adjacent",
+      "adjacent": [
+        16,
+        20
+      ],
+      "result": "ok"
+    },
+    {
+      "type": "navigate",
+      "target": "C",
+      "result": "ok",
+      "pos": [
+        11,
+        19
+      ]
+    },
+    {
+      "type": "inspect",
+      "target": "C",
+      "result": "ok"
+    }
+  ]
+}
